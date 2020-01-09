@@ -4,6 +4,19 @@
 
 `docker-compose run --build`
 
+## Deploy containers to K8s
+
+```bash
+minikube addons enable ingress
+
+eval $(minikube docker-env)
+
+# Build custom images so that Minikube's docker registry knows about them
+docker build -t job-api job-api/
+
+kubectl apply -f kubernetes-all.yml
+```
+
 ## Trigger job
 
 `curl -X POST -H "Content-Type: application/json" -d '{"name": "test job", "parameters": {}}' http://localhost:8080/jobs`
