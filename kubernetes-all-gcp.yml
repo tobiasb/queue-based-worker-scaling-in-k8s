@@ -20,6 +20,8 @@ spec:
       labels:
         app: rabbitmq
     spec:
+      nodeSelector:
+        cloud.google.com/gke-nodepool: default-pool
       containers:
       - name: rabbitmq
         image: 'rabbitmq:3.8-management-alpine'
@@ -57,9 +59,11 @@ spec:
       labels:
         app: jobapi
     spec:
+      nodeSelector:
+        cloud.google.com/gke-nodepool: default-pool
       containers:
       - name: jobapi
-        image: 'job-api'
+        image: 'eu.gcr.io/tobiasb-test-project/tobiasb/job-api@sha256:ac03b107dee4d68a6137c0ec13bb37d5f4856c01dcb733557da1966b27606310'
         imagePullPolicy: IfNotPresent
         env:
         - name: AMQP_URL
@@ -125,9 +129,11 @@ spec:
       labels:
         app: worker
     spec:
+      nodeSelector:
+        cloud.google.com/gke-nodepool: worker-pool
       containers:
       - name: worker
-        image: 'worker'
+        image: 'eu.gcr.io/tobiasb-test-project/tobiasb/worker@sha256:dcdae5437f8e86ab3f674cfe1d2b4a5ef296d236d6887cbe76885f13a97e733d'
         imagePullPolicy: IfNotPresent
         env:
         - name: AMQP_URL
@@ -142,7 +148,7 @@ spec:
               key: jobapi_host
         resources:
           requests:
-            cpu: 50m
+            cpu: 600m
             memory: 32Mi
 ---
 kind: ClusterRole
@@ -181,9 +187,11 @@ spec:
       labels:
         app: autoscaler
     spec:
+      nodeSelector:
+        cloud.google.com/gke-nodepool: default-pool
       containers:
       - name: autoscaler
-        image: 'autoscaler'
+        image: 'eu.gcr.io/tobiasb-test-project/tobiasb/autoscaler@sha256:dade8a25a0b797eef77413d573d97c7ca4f3cfd376ea2407b134b5c2b9dfc8c5'
         imagePullPolicy: IfNotPresent
         env:
         - name: AMQP_URL
@@ -201,7 +209,7 @@ spec:
         - name: SCALE_IN_COOLDOWN_SECONDS
           value: '30'
         - name: MAX_REPLICAS
-          value: '3'
+          value: '4'
         - name: K8S_NAMESPACE
           valueFrom:
             fieldRef:

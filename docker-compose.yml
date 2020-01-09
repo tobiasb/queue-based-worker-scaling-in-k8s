@@ -15,7 +15,9 @@ services:
     depends_on:
       - rabbitmq
     environment:
+      LOG_LEVEL: 'DEBUG'
       AMQP_URL: 'rabbitmq'
+      FLASK_DEBUG: 1
     ports:
       - 8080:8080
     networks:
@@ -26,8 +28,9 @@ services:
     depends_on:
       - rabbitmq
     environment:
+      LOG_LEVEL: 'DEBUG'
       AMQP_URL: 'rabbitmq'
-      JOBS_API_HOST: 'http://job-api:8080'
+      JOB_API_HOST: 'http://job-api:8080'
     networks:
       - network
 
